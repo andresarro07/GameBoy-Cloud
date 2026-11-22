@@ -1,0 +1,11 @@
+#Local device configuration
+.env
+
+#Python Environment and Bytecode cache
+venv/
+__pycache__/
+*.py[cod]
+
+#Local sync logs & automatic backup
+*.log
+.backups/
