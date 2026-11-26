@@ -1,10 +1,19 @@
 @echo off
-setlocal
-
-:: Switch to the directory where this script (and .env / sync.py) lives
-
 cd /d "%~dp0"
-"venv\Scripts\python.exe" sync.py pull
+
+echo [SYNC] Pulling latest saves from Cloudflare R2...
+python sync.py pull
+if errorlevel 1 (
+    echo [WARNING] Cloud pull failed. Check your internet connection.
+    pause
+)
+
+echo [LAUNCH] Starting RetroArch...
 start "" /wait "C:\RetroArch-Win64\retroarch.exe"
-"venv\Scripts\python.exe" sync.py push
-timeout /t 3 >nul
+
+echo [SYNC] Pushing updated saves to Cloudflare R2...
+python sync.py push
+if errorlevel 1 (
+    echo [ERROR] Cloud push failed! Your save is only stored locally.
+    pause
+)
